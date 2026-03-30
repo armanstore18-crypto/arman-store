@@ -3,7 +3,6 @@
 <head>
   <title>Arman Store</title>
 
-  <!-- MOBILE FIX -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -22,7 +21,28 @@
       align-items: center;
     }
 
+    /* SIDEBAR */
+    .sidebar {
+      width: 200px;
+      background: #d9cfc3;
+      padding: 10px;
+      height: 100vh;
+      position: fixed;
+      overflow-y: auto;
+    }
+
+    .sidebar button {
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      background: white;
+    }
+
+    /* PRODUCTS */
     .products {
+      margin-left: 220px;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 15px;
@@ -42,41 +62,6 @@
       object-fit: contain;
     }
 
-    /* 📱 MOBILE GRID FIX */
-    @media (max-width: 768px) {
-      .products {
-        grid-template-columns: repeat(2, 1fr);
-        padding: 10px;
-      }
-    }
-
-    /* 🛒 SLIDING CART */
-    .cart-box {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 80%;
-      height: 100%;
-      background: white;
-      z-index: 1000;
-      transition: 0.3s ease;
-      overflow-y: auto;
-      box-shadow: -2px 0 10px rgba(0,0,0,0.2);
-      padding: 10px;
-    }
-
-    .cart-box.active {
-      right: 0;
-    }
-
-    .cart-btn {
-      background: white;
-      color: black;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
     button {
       margin-top: 5px;
       padding: 5px 10px;
@@ -84,6 +69,42 @@
       background: #3e2b1f;
       color: white;
       border-radius: 5px;
+    }
+
+    /* 🛒 FULL SCREEN CART */
+    .cart-box {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100%;
+      height: 100%;
+      background: white;
+      z-index: 2000;
+      transition: 0.3s ease;
+      overflow-y: auto;
+      padding: 15px;
+    }
+
+    .cart-box.active {
+      right: 0;
+    }
+
+    /* 📱 MOBILE FIX */
+    @media (max-width: 768px) {
+
+      .sidebar {
+        display: none; /* hide sidebar */
+      }
+
+      .products {
+        margin-left: 0;
+        grid-template-columns: repeat(2, 1fr);
+        padding: 10px;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
     }
   </style>
 </head>
@@ -93,10 +114,30 @@
   <!-- HEADER -->
   <header>
     <div>ARMAN STORE</div>
-    <div>
-      <button class="cart-btn" onclick="openCart()">Cart</button>
-    </div>
+    <button onclick="openCart()">Cart</button>
   </header>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <button>Tissues</button>
+    <button>Toilet Roll</button>
+    <button>Kitchen Roll</button>
+    <button>Mop</button>
+    <button>Wiper</button>
+    <button>Broom</button>
+    <button>Room Freshner</button>
+    <button>Handwash</button>
+    <button>Floor Cleaner</button>
+    <button>Cleaning Cloth</button>
+    <button>Glass</button>
+    <button>Toilet Cleaner</button>
+    <button>Dishwash</button>
+    <button>Cleaning Spray</button>
+    <button>Wipes</button>
+    <button>Foil Products</button>
+    <button>Garbage Bag</button>
+    <button>Liquid</button>
+  </div>
 
   <!-- PRODUCTS -->
   <div class="products" id="products"></div>
@@ -104,14 +145,14 @@
   <!-- CART -->
   <div class="cart-box" id="cart">
     <button onclick="closeCart()">⬅ Back</button>
-    <h3>Your Cart</h3>
+    <h2>Cart</h2>
     <div id="cart-items"></div>
   </div>
 
   <script>
     let cart = [];
 
-    // FETCH PRODUCTS FROM BACKEND
+    // FETCH PRODUCTS
     fetch('/products')
       .then(res => res.json())
       .then(data => {
