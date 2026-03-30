@@ -8,7 +8,6 @@ app.use(express.static('public'));
 mongoose.connect('mongodb+srv://arman1:arman123@cluster0.ilcnxcl.mongodb.net/arman-store')
 .then(async ()=>{
   console.log("MongoDB Connected");
-  await seedProducts();
 })
 .catch(err=>console.log(err));
 
@@ -157,4 +156,15 @@ app.get('/products', async (req,res)=>{
   res.json(await Product.find());
 });
 
-app.listen(3000, ()=>console.log("Server running"));
+// ✅ CORRECT PLACE
+app.get('/seed', async (req, res) => {
+  try {
+    await seedProducts();
+    res.send("Products Added ✅");
+  } catch (err) {
+    res.send("Error seeding products");
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, ()=>console.log("Server running"));
