@@ -3,234 +3,240 @@
 <head>
 <title>Arman Store</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body{margin:0;font-family:sans-serif;background:#f5f1e8}
-header{background:#3e2f25;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-circle{width:40px;height:40px;border-radius:50%;background:#d4a373;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#3e2f25}
-.cart-btn{background:#d4a373;color:#3e2f25;padding:8px 12px;border-radius:8px;cursor:pointer}
-.login-btn{background:white;color:#3e2f25;padding:8px 12px;border-radius:8px;cursor:pointer;margin-right:5px}
-.container{display:flex}
-.sidebar{width:20%;background:#e8dccb;padding:10px;height:100vh;overflow:auto;display:flex;flex-direction:column;gap:8px}
-.category-btn{background:white;padding:10px;border-radius:8px;cursor:pointer;text-align:center;border:1px solid #d4a373;font-weight:500}
-.category-btn:hover{background:#d4a373;color:#3e2f25}
-.main{width:80%;padding:10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;height:100vh;overflow:auto}
-.card{background:white;padding:10px;border-radius:10px}
-.card img{width:100%;height:150px;object-fit:cover}
-button{background:#3e2f25;color:white;border:none;padding:8px;width:100%;cursor:pointer}
-.qty{display:flex;justify-content:space-between;margin-top:5px}
-.qty button{width:30%}
-.cart-box{position:fixed;top:0;right:-400px;width:350px;height:100%;background:white;padding:15px;transition:0.3s;overflow:auto}
-.cart-box.open{right:0}
-.remove-btn{background:red;color:white;padding:4px;border:none;border-radius:5px}
-.checkout{background:blue;color:white;margin-top:10px}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:none;justify-content:center;align-items:center}
-.modal-content{background:white;padding:20px;border-radius:10px;width:300px}
-input{width:100%;padding:8px;margin:5px 0}
-.home-section{padding:20px;text-align:center;background:white}
+body {
+  margin:0;
+  font-family:sans-serif;
+  background:#f5f1e8;
+}
+
+header{
+  background:#3e2b1f;
+  color:white;
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo-circle{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:#d4a373;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.container{
+  display:flex;
+}
+
+.sidebar{
+  width:20%;
+  background:#e8dccb;
+  padding:10px;
+  height:100vh;
+  overflow:auto;
+}
+
+.category-btn{
+  background:white;
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:10px;
+  cursor:pointer;
+  text-align:center;
+}
+
+.main{
+  width:80%;
+  padding:10px;
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap:10px;
+}
+
+.card{
+  background:white;
+  padding:10px;
+  border-radius:10px;
+}
+
+.card img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+}
+
+button{
+  background:#3e2b1f;
+  color:white;
+  border:none;
+  padding:8px;
+  width:100%;
+  cursor:pointer;
+}
+
+.qty{
+  display:flex;
+  justify-content:space-between;
+  margin-top:5px;
+}
+
+.cart-box{
+  position:fixed;
+  top:0;
+  right:-400px;
+  width:300px;
+  height:100%;
+  background:white;
+  padding:15px;
+  transition:0.3s;
+}
+
+.whatsapp-btn{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:green;
+  color:white;
+  padding:12px;
+  text-align:center;
+}
+
+/* ✅ MOBILE FIX */
+@media (max-width:768px){
+
+  .container{
+    flex-direction:column;
+  }
+
+  .sidebar{
+    width:100%;
+    display:flex;
+    overflow-x:auto;
+    gap:10px;
+    height:auto;
+  }
+
+  .category-btn{
+    min-width:120px;
+    flex-shrink:0;
+  }
+
+  .main{
+    width:100%;
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  header{
+    flex-direction:column;
+    text-align:center;
+  }
+}
 </style>
+
 </head>
 
 <body>
 
 <header>
-<div class="logo">
-<div class="logo-circle">AS</div>
-<div>ARMAN STORE</div>
-</div>
-<div>
-<span class="login-btn" onclick="scrollToTop()">Home</span>
-<span class="login-btn" onclick="showLogin()">Login</span>
-<span class="cart-btn" onclick="toggleCart()">🛒 (<span id="cartCount">0</span>)</span>
-</div>
+  <div class="logo">
+    <div class="logo-circle">AS</div>
+    <div>ARMAN STORE</div>
+  </div>
+
+  <div>
+    <button onclick="location.reload()">Home</button>
+  </div>
 </header>
 
-<div class="home-section">
-<h2>Welcome to Arman Store</h2>
-<p>Your one-stop shop for daily essentials, cleaning products, and more.</p>
-<h3>📍 Shop Address</h3>
-<p>Mumbai, Maharashtra, India</p>
-<h3>📞 Contact</h3>
-<p>Phone: 7304578176</p>
-<p>Email: armanstore@gmail.com</p>
+<div style="text-align:center; padding:10px;">
+  <h2>Welcome to Arman Store</h2>
+  <p>Your one-stop shop for daily essentials</p>
+  <p><b>📍 Mumbai, India</b></p>
+  <p><b>📞 7304578176</b></p>
 </div>
 
 <div class="container">
-<div class="sidebar" id="categories"></div>
-<div class="main" id="products"></div>
+
+  <div class="sidebar" id="categories"></div>
+
+  <div class="main" id="products"></div>
+
 </div>
 
-<div class="cart-box" id="cartBox">
-<h2>Cart</h2>
-<div id="cartItems"></div>
-<h3>Total: ₹<span id="total">0</span></h3>
-<button class="checkout" onclick="showCheckout()">Checkout</button>
+<div class="whatsapp-btn" onclick="orderWhatsApp()">
+  Order on WhatsApp
 </div>
-
-<div class="modal" id="checkoutModal">
-<div class="modal-content">
-<h3>Checkout</h3>
-<input id="name" placeholder="Name">
-<input id="phone" placeholder="Phone">
-<input id="address" placeholder="Address">
-<button onclick="placeOrder()">Place Order</button>
-</div>
-</div>
-
-<div class="modal" id="loginModal">
-<div class="modal-content">
-<h3>Login</h3>
-<input placeholder="Username">
-<input placeholder="Password" type="password">
-<button onclick="closeLogin()">Login</button>
-</div>
-</div>
-
-<button onclick="orderWhatsApp()" style="position:fixed;bottom:20px;right:20px;background:green;color:white;padding:12px;border-radius:10px">Order on WhatsApp</button>
 
 <script>
-let allProducts=[];
 let cart=[];
 
-async function load(){
-try{
-let r = await fetch('/products');
-allProducts = await r.json();
-showCategories();
-showProducts(allProducts);
-}catch(e){
-console.error(e);
-alert('Failed to load products');
-}
-}
-
-function showCategories(){
-let cats=[...new Set(allProducts.map(p=>p.category))];
-categories.innerHTML = cats.map(c=>`<div class="category-btn" onclick="filter('${c}')">${c}</div>`).join('');
-}
+fetch('/products')
+.then(res=>res.json())
+.then(data=>{
+  showProducts(data);
+  showCategories(data);
+});
 
 function showProducts(data){
-products.innerHTML=data.map((p)=>`
-<div class="card">
-<img src="${p.image || ''}" onerror="this.src='https://picsum.photos/200'">
-<h3>${p.name}</h3>
-<p>₹${p.price}</p>
-<div class="qty">
-<button onclick="changeQty('${p.name}',-1)">-</button>
-<button onclick="add('${p.name}')">Add</button>
-<button onclick="changeQty('${p.name}',1)">+</button>
-</div>
-</div>`).join('');
+  let html='';
+  data.forEach(p=>{
+    html+=`
+    <div class="card">
+      <img src="${p.image||''}">
+      <h4>${p.name}</h4>
+      <p>₹${p.price}</p>
+      <div class="qty">
+        <button onclick="addToCart('${p.name}',${p.price})">Add</button>
+      </div>
+    </div>
+    `;
+  });
+  document.getElementById('products').innerHTML=html;
 }
 
-function filter(c){
-showProducts(allProducts.filter(p=>p.category===c));
+function showCategories(data){
+  let cats=[...new Set(data.map(p=>p.category))];
+  let html='';
+  cats.forEach(c=>{
+    html+=`<div class="category-btn" onclick="filterCat('${c}')">${c}</div>`;
+  });
+  document.getElementById('categories').innerHTML=html;
 }
 
-function add(name){
-let product = allProducts.find(p=>p.name===name);
-let item = cart.find(c=>c.name===name);
-if(item){item.qty++;}else{cart.push({...product,qty:1});}
-updateCart();
+function filterCat(cat){
+  fetch('/products')
+  .then(res=>res.json())
+  .then(data=>{
+    let filtered=data.filter(p=>p.category===cat);
+    showProducts(filtered);
+  });
 }
 
-function changeQty(name,delta){
-let item = cart.find(c=>c.name===name);
-if(item){
-item.qty+=delta;
-if(item.qty<=0) cart=cart.filter(c=>c.name!==name);
-}else if(delta>0){
-let product = allProducts.find(p=>p.name===name);
-cart.push({...product,qty:1});
-}
-updateCart();
-}
-
-function remove(index){
-cart.splice(index,1);
-updateCart();
-}
-
-function updateCart(){
-let total=0;
-cartItems.innerHTML=cart.map((item,i)=>{
-total+=item.price*item.qty;
-return `<div>${item.name} x${item.qty} ₹${item.price*item.qty} <button class='remove-btn' onclick='remove(${i})'>X</button></div>`;
-}).join('');
-
-document.getElementById('total').innerText=total;
-document.getElementById('cartCount').innerText=cart.length;
-}
-
-function toggleCart(){cartBox.classList.toggle('open');}
-function showCheckout(){checkoutModal.style.display='flex';}
-
-function placeOrder(){
-let name = document.getElementById('name').value;
-let phone = document.getElementById('phone').value;
-let address = document.getElementById('address').value;
-
-if(!name || !phone || !address){
-alert('Please fill all details ❌');
-return;
-}
-
-let msg = "🛒 New Order %0A";
-msg += "Name: " + name + "%0A";
-msg += "Phone: " + phone + "%0A";
-msg += "Address: " + address + "%0A%0A";
-
-let total = 0;
-cart.forEach(i=>{
-msg += i.name+" x"+i.qty+" = ₹"+(i.price*i.qty)+"%0A";
-total += i.price*i.qty;
-});
-msg += "%0ATotal: ₹" + total;
-
-window.open(`https://wa.me/917304578176?text=${msg}`);
-
-let customerMsg = "Thank you for your order! 😊%0A";
-customerMsg += "Total: ₹" + total + "%0A";
-window.open(`https://wa.me/91${phone}?text=${customerMsg}`);
-
-checkoutModal.style.display='none';
-cart=[];
-updateCart();
-showThankYou();
+function addToCart(name,price){
+  cart.push({name,price});
 }
 
 function orderWhatsApp(){
-if(cart.length===0){alert('Cart is empty ❌');return;}
-let msg='Order:%0A';
-let total=0;
-cart.forEach(i=>{
-msg+=i.name+" x"+i.qty+" = ₹"+(i.price*i.qty)+"%0A";
-total+=i.price*i.qty;
-});
-msg+='Total: ₹'+total;
-window.open(`https://wa.me/917304578176?text=${msg}`);
-}
+  let text="Order:%0A";
+  cart.forEach(i=>{
+    text+=`${i.name} - ₹${i.price}%0A`;
+  });
 
-function showLogin(){loginModal.style.display='flex';}
-function closeLogin(){loginModal.style.display='none';alert('Logged in successfully');}
-function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});} 
-
-load();
-</script>
-
-<div id="thankYouPage" style="display:none;padding:40px;text-align:center">
-<h1>🎉 Thank You for Your Order!</h1>
-<p>Your order has been placed successfully.</p>
-<p>We will contact you shortly on WhatsApp.</p>
-<button onclick="location.reload()">Back to Home</button>
-</div>
-
-<script>
-function showThankYou(){
-document.querySelector('.container').style.display='none';
-document.querySelector('.home-section').style.display='none';
-document.getElementById('thankYouPage').style.display='block';
-window.scrollTo({top:0,behavior:'smooth'});
+  window.open(`https://wa.me/917304578176?text=${text}`);
 }
 </script>
 
