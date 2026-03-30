@@ -1,244 +1,156 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Arman Store</title>
+  <title>Arman Store</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- MOBILE FIX -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body {
-  margin:0;
-  font-family:sans-serif;
-  background:#f5f1e8;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #f5f1e8;
+    }
 
-header{
-  background:#3e2b1f;
-  color:white;
-  padding:15px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
+    header {
+      background: #3e2b1f;
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-.logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
+    .products {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      padding: 15px;
+    }
 
-.logo-circle{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  background:#d4a373;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+    .product {
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+    }
 
-.container{
-  display:flex;
-}
+    .product img {
+      width: 100%;
+      height: 120px;
+      object-fit: contain;
+    }
 
-.sidebar{
-  width:20%;
-  background:#e8dccb;
-  padding:10px;
-  height:100vh;
-  overflow:auto;
-}
+    /* 📱 MOBILE GRID FIX */
+    @media (max-width: 768px) {
+      .products {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 10px;
+      }
+    }
 
-.category-btn{
-  background:white;
-  padding:10px;
-  border-radius:8px;
-  margin-bottom:10px;
-  cursor:pointer;
-  text-align:center;
-}
+    /* 🛒 SLIDING CART */
+    .cart-box {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 80%;
+      height: 100%;
+      background: white;
+      z-index: 1000;
+      transition: 0.3s ease;
+      overflow-y: auto;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+      padding: 10px;
+    }
 
-.main{
-  width:80%;
-  padding:10px;
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap:10px;
-}
+    .cart-box.active {
+      right: 0;
+    }
 
-.card{
-  background:white;
-  padding:10px;
-  border-radius:10px;
-}
+    .cart-btn {
+      background: white;
+      color: black;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-.card img{
-  width:100%;
-  height:140px;
-  object-fit:cover;
-}
-
-button{
-  background:#3e2b1f;
-  color:white;
-  border:none;
-  padding:8px;
-  width:100%;
-  cursor:pointer;
-}
-
-.qty{
-  display:flex;
-  justify-content:space-between;
-  margin-top:5px;
-}
-
-.cart-box{
-  position:fixed;
-  top:0;
-  right:-400px;
-  width:300px;
-  height:100%;
-  background:white;
-  padding:15px;
-  transition:0.3s;
-}
-
-.whatsapp-btn{
-  position:fixed;
-  bottom:0;
-  left:0;
-  width:100%;
-  background:green;
-  color:white;
-  padding:12px;
-  text-align:center;
-}
-
-/* ✅ MOBILE FIX */
-@media (max-width:768px){
-
-  .container{
-    flex-direction:column;
-  }
-
-  .sidebar{
-    width:100%;
-    display:flex;
-    overflow-x:auto;
-    gap:10px;
-    height:auto;
-  }
-
-  .category-btn{
-    min-width:120px;
-    flex-shrink:0;
-  }
-
-  .main{
-    width:100%;
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  header{
-    flex-direction:column;
-    text-align:center;
-  }
-}
-</style>
-
+    button {
+      margin-top: 5px;
+      padding: 5px 10px;
+      border: none;
+      background: #3e2b1f;
+      color: white;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-  <div class="logo">
-    <div class="logo-circle">AS</div>
+  <!-- HEADER -->
+  <header>
     <div>ARMAN STORE</div>
-  </div>
-
-  <div>
-    <button onclick="location.reload()">Home</button>
-  </div>
-</header>
-
-<div style="text-align:center; padding:10px;">
-  <h2>Welcome to Arman Store</h2>
-  <p>Your one-stop shop for daily essentials</p>
-  <p><b>📍 Mumbai, India</b></p>
-  <p><b>📞 7304578176</b></p>
-</div>
-
-<div class="container">
-
-  <div class="sidebar" id="categories"></div>
-
-  <div class="main" id="products"></div>
-
-</div>
-
-<div class="whatsapp-btn" onclick="orderWhatsApp()">
-  Order on WhatsApp
-</div>
-
-<script>
-let cart=[];
-
-fetch('/products')
-.then(res=>res.json())
-.then(data=>{
-  showProducts(data);
-  showCategories(data);
-});
-
-function showProducts(data){
-  let html='';
-  data.forEach(p=>{
-    html+=`
-    <div class="card">
-      <img src="${p.image||''}">
-      <h4>${p.name}</h4>
-      <p>₹${p.price}</p>
-      <div class="qty">
-        <button onclick="addToCart('${p.name}',${p.price})">Add</button>
-      </div>
+    <div>
+      <button class="cart-btn" onclick="openCart()">Cart</button>
     </div>
-    `;
-  });
-  document.getElementById('products').innerHTML=html;
-}
+  </header>
 
-function showCategories(data){
-  let cats=[...new Set(data.map(p=>p.category))];
-  let html='';
-  cats.forEach(c=>{
-    html+=`<div class="category-btn" onclick="filterCat('${c}')">${c}</div>`;
-  });
-  document.getElementById('categories').innerHTML=html;
-}
+  <!-- PRODUCTS -->
+  <div class="products" id="products"></div>
 
-function filterCat(cat){
-  fetch('/products')
-  .then(res=>res.json())
-  .then(data=>{
-    let filtered=data.filter(p=>p.category===cat);
-    showProducts(filtered);
-  });
-}
+  <!-- CART -->
+  <div class="cart-box" id="cart">
+    <button onclick="closeCart()">⬅ Back</button>
+    <h3>Your Cart</h3>
+    <div id="cart-items"></div>
+  </div>
 
-function addToCart(name,price){
-  cart.push({name,price});
-}
+  <script>
+    let cart = [];
 
-function orderWhatsApp(){
-  let text="Order:%0A";
-  cart.forEach(i=>{
-    text+=`${i.name} - ₹${i.price}%0A`;
-  });
+    // FETCH PRODUCTS FROM BACKEND
+    fetch('/products')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("products");
 
-  window.open(`https://wa.me/917304578176?text=${text}`);
-}
-</script>
+        data.forEach(product => {
+          container.innerHTML += `
+            <div class="product">
+              <img src="${product.image}">
+              <h4>${product.name}</h4>
+              <p>₹${product.price}</p>
+              <button onclick='addToCart(${JSON.stringify(product)})'>Add</button>
+            </div>
+          `;
+        });
+      });
+
+    function addToCart(product) {
+      cart.push(product);
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartDiv = document.getElementById("cart-items");
+      cartDiv.innerHTML = "";
+
+      cart.forEach(item => {
+        cartDiv.innerHTML += `<p>${item.name} - ₹${item.price}</p>`;
+      });
+    }
+
+    function openCart() {
+      document.getElementById("cart").classList.add("active");
+    }
+
+    function closeCart() {
+      document.getElementById("cart").classList.remove("active");
+    }
+  </script>
 
 </body>
 </html>
