@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
-mongoose.connect('mongodb://127.0.0.1:27017/arman-store')
+mongoose.connect('mongodb+srv://arman1:arman123@cluster0.ilcnxcl.mongodb.net/arman-store')
 .then(async ()=>{
   console.log("MongoDB Connected");
   await seedProducts();
