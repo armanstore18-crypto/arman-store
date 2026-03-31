@@ -45,8 +45,9 @@ app.post('/order', async (req,res)=>{
   res.send("saved");
 });
 
-app.get('/orders/:email', async (req,res)=>{
-  res.json(await Order.find({userEmail:req.params.email}));
+app.get('/orders/:phone', async (req,res)=>{
+  let orders = await Order.find({ phone: req.params.phone });
+  res.json(orders);
 });
 
 async function seedProducts(){

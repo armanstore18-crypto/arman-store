@@ -258,6 +258,8 @@ function placeOrder(){
   let phone = document.getElementById("phone").value;
   let address = document.getElementById("address").value;
 
+  localStorage.setItem("userPhone", phone);
+
   if(!phone || !address){
     alert("Please fill phone and address");
     return;
@@ -278,10 +280,10 @@ function placeOrder(){
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify({
-      userEmail: currentUser.email,
-      items: cart,
-      total
-    })
+  phone: phone,
+  items: cart,
+  total
+})
   });
 
   // ✅ Open WhatsApp
@@ -315,7 +317,15 @@ function sendWhatsApp(){
 function showOrders(){
 
   document.querySelector(".main").style.display = "none";
-  fetch('/orders/'+currentUser.email)
+
+  let phone = localStorage.getItem("userPhone");
+
+if(!phone){
+  alert("Please place an order first");
+  return;
+}
+
+fetch('/orders/'+phone)
   .then(res=>res.json())
   .then(data=>{
     let html="<h2 style='text-align:center;'>Your Orders</h2>";
