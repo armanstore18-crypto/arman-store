@@ -5,250 +5,219 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  margin: 0;
-  font-family: sans-serif;
-  background: #f5f1e8;
-}
+body { margin:0; font-family:sans-serif; background:#f5f1e8; }
+header { background:#3e2b1f; color:white; padding:12px; display:flex; justify-content:space-between; }
+body.cart-open { overflow:hidden; }
 
-body.cart-open {
-  overflow: hidden;
-}
+.home { text-align:center; padding:15px; }
 
-header {
-  background: #3e2b1f;
-  color: white;
-  padding: 12px;
-  display: flex;
-  justify-content: space-between;
-}
+.main { display:flex; }
+.sidebar { width:150px; padding:10px; }
+.sidebar button { width:100%; margin:5px 0; padding:8px; }
 
-.home {
-  text-align: center;
-  padding: 15px;
-}
+.products { flex:1; display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; padding:10px; }
+.product { background:white; padding:10px; border-radius:10px; text-align:center; }
 
-.main {
-  display: flex;
-}
+.cart { position:fixed; top:0; right:-100%; width:300px; height:100%; background:white; transition:0.3s; z-index:3000; padding:15px; overflow-y:auto; }
+.cart.active { right:0; }
 
-.sidebar {
-  width: 150px;
-  padding: 10px;
-}
+.overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:2000; }
+.overlay.active { display:block; }
 
-.sidebar button {
-  width: 100%;
-  margin: 5px 0;
-  padding: 8px;
-}
+#login-box { position:fixed; top:0; left:0; width:100%; height:100%; background:white; display:flex; flex-direction:column; justify-content:center; align-items:center; }
 
-.products {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
-  padding: 10px;
-}
-
-.product {
-  background: white;
-  padding: 10px;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.product img {
-  width: 100%;
-  height: 120px;
-  object-fit: contain;
-}
-
-.cart {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 300px;
-  height: 100%;
-  background: white;
-  transition: 0.3s;
-  z-index: 3000;
-  padding: 15px;
-  overflow-y: auto;
-}
-
-.cart.active {
-  right: 0;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: none;
-  z-index: 2000;
-}
-
-.overlay.active {
-  display: block;
-}
-
-@media (max-width: 768px) {
-  .main {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    display: flex;
-    overflow-x: auto;
-    width: 100%;
-  }
-
-  .sidebar button {
-    flex: 1;
-  }
-
-  .cart {
-    width: 85%;
-  }
+@media(max-width:768px){
+.main{flex-direction:column;}
+.sidebar{display:flex; overflow-x:auto; width:100%;}
+.cart{width:85%;}
 }
 </style>
 </head>
 
 <body>
 
+<div id="login-box">
+<h2>Login</h2>
+<input id="user-name" placeholder="Name"><br><br>
+<input id="user-email" placeholder="Email"><br><br>
+<button onclick="login()">Login</button>
+</div>
+
 <header>
-  <h3>ARMAN STORE</h3>
-  <button onclick="openCart()">🛒 Cart</button>
+<h3>ARMAN STORE</h3>
+<button onclick="openCart()">🛒 Cart</button>
+<button onclick="showOrders()">Orders</button>
 </header>
 
 <div class="home">
-  <h2>Welcome to Arman Store</h2>
-  <p>Your one-stop shop for daily essentials, cleaning products, and household needs.</p>
-  <p>We provide quality products at affordable prices with quick service.</p>
-  <p>Our goal is to make your shopping easy and convenient.</p>
+<h2>Welcome to Arman Store</h2>
+<p>Your one-stop shop for daily essentials and cleaning products.</p>
+<p>We provide quality products at affordable prices.</p>
 
-  <h3>📍 Address</h3>
-  <p>Mumbai, Maharashtra, India</p>
+<h3>📍 Address</h3>
+<p>Mumbai, Maharashtra, India</p>
 
-  <h3>📞 Contact</h3>
-  <p>Phone: 7304578176</p>
-  <p>Email: armanstore@gmail.com</p>
-  <p>Instagram: @armanstore</p>
+<h3>📞 Contact</h3>
+<p>Phone: 7304578176</p>
+<p>Email: armanstore18@gmail.com</p>
+<p>Instagram: @armanstore</p>
 </div>
 
 <div class="main">
-  <div class="sidebar" id="categories"></div>
-  <div class="products" id="products"></div>
+<div class="sidebar" id="categories"></div>
+<div class="products" id="products"></div>
 </div>
+
+<div id="orders"></div>
 
 <div class="overlay" id="overlay" onclick="closeCart()"></div>
 
 <div class="cart" id="cart">
-  <button onclick="closeCart()">✖</button>
-  <h2>Cart</h2>
-  <div id="cart-items"></div>
+<button onclick="closeCart()">✖</button>
+<h2>Cart</h2>
+<div id="cart-items"></div>
 
-  <h3>Checkout</h3>
-  <input id="name" placeholder="Name"><br><br>
-  <input id="phone" placeholder="Phone"><br><br>
-  <textarea id="address" placeholder="Address"></textarea><br><br>
+<h3>Checkout</h3>
+<input id="address" placeholder="Address"><br><br>
 
-  <button onclick="sendWhatsApp()">Place Order</button>
+<button onclick="placeOrder()">Place Order</button>
 </div>
 
 <script>
 let cart = [];
 let allProducts = [];
+let currentUser = null;
+let quantities = {};
+
+function login(){
+let name = document.getElementById("user-name").value;
+let email = document.getElementById("user-email").value;
+
+fetch('/login',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({name,email})
+})
+.then(res=>res.json())
+.then(user=>{
+currentUser = user;
+document.getElementById("login-box").style.display="none";
+});
+}
 
 fetch('/products')
-.then(res => res.json())
-.then(data => {
-  allProducts = data;
-  showProducts(data);
+.then(res=>res.json())
+.then(data=>{
+allProducts = data;
+showProducts(data);
 
-  let categories = [...new Set(data.map(p => p.category))];
-  let html = '<button onclick="showProducts(allProducts)">All</button>';
-  categories.forEach(c => {
-    html += `<button onclick="filterCategory('${c}')">${c}</button>`;
-  });
-  document.getElementById("categories").innerHTML = html;
+let categories=[...new Set(data.map(p=>p.category))];
+let html='<button onclick="showProducts(allProducts)">All</button>';
+categories.forEach(c=>{
+html+=`<button onclick="filterCategory('${c}')">${c}</button>`;
+});
+document.getElementById("categories").innerHTML=html;
 });
 
 function showProducts(data){
-  let html = "";
-  data.forEach(p => {
-    html += `
-      <div class="product">
-        <img src="${p.image || ''}">
-        <h4>${p.name}</h4>
-        <p>₹${p.price}</p>
-        <button onclick='addToCart(${JSON.stringify(p)})'>Add</button>
-      </div>
-    `;
-  });
-  document.getElementById("products").innerHTML = html;
+let html="";
+data.forEach(p=>{
+html+=`
+<div class="product">
+<img src="${p.image || ''}">
+<h4>${p.name}</h4>
+<p>₹${p.price}</p>
+
+<button onclick="dec('${p.name}')">-</button>
+<span id="q-${p.name}">1</span>
+<button onclick="inc('${p.name}')">+</button><br><br>
+
+<button onclick='add(${JSON.stringify(p)})'>Add</button>
+</div>`;
+});
+document.getElementById("products").innerHTML=html;
 }
 
-function filterCategory(cat){
-  let filtered = allProducts.filter(p => p.category === cat);
-  showProducts(filtered);
+function filterCategory(c){
+showProducts(allProducts.filter(p=>p.category===c));
 }
 
-function addToCart(p){
-  cart.push(p);
-  renderCart();
+function inc(n){
+quantities[n]=(quantities[n]||1)+1;
+document.getElementById("q-"+n).innerText=quantities[n];
+}
+
+function dec(n){
+quantities[n]=Math.max(1,(quantities[n]||1)-1);
+document.getElementById("q-"+n).innerText=quantities[n];
+}
+
+function add(p){
+let qty=quantities[p.name]||1;
+cart.push({...p,qty});
+renderCart();
 }
 
 function renderCart(){
-  let html = "";
-  let total = 0;
+let html="";
+let total=0;
 
-  cart.forEach(item => {
-    total += item.price;
-    html += `<p>${item.name} - ₹${item.price}</p>`;
-  });
+cart.forEach(i=>{
+total+=i.price*i.qty;
+html+=`<p>${i.name} x${i.qty} - ₹${i.price*i.qty}</p>`;
+});
 
-  html += `<h3>Total: ₹${total}</h3>`;
-  document.getElementById("cart-items").innerHTML = html;
+html+=`<h3>Total: ₹${total}</h3>`;
+document.getElementById("cart-items").innerHTML=html;
 }
 
 function openCart(){
-  document.getElementById("cart").classList.add("active");
-  document.getElementById("overlay").classList.add("active");
-  document.body.classList.add("cart-open");
+cartEl.classList.add("active");
+overlay.classList.add("active");
+document.body.classList.add("cart-open");
 }
 
 function closeCart(){
-  document.getElementById("cart").classList.remove("active");
-  document.getElementById("overlay").classList.remove("active");
-  document.body.classList.remove("cart-open");
+cartEl.classList.remove("active");
+overlay.classList.remove("active");
+document.body.classList.remove("cart-open");
 }
 
-function sendWhatsApp(){
-  let name = document.getElementById("name").value;
-  let phone = document.getElementById("phone").value;
-  let address = document.getElementById("address").value;
+const cartEl=document.getElementById("cart");
+const overlay=document.getElementById("overlay");
 
-  let message = `🛒 New Order\n\nName: ${name}\nPhone: ${phone}\nAddress: ${address}\n\n`;
+function placeOrder(){
+let address=document.getElementById("address").value;
+let total=0;
+let msg=`🛒 Order\n\nUser:${currentUser.email}\nAddress:${address}\n\n`;
 
-  let total = 0;
+cart.forEach(i=>{
+msg+=`${i.name} x${i.qty}\n`;
+total+=i.price*i.qty;
+});
 
-  cart.forEach(item => {
-    message += `${item.name} - ₹${item.price}\n`;
-    total += item.price;
-  });
+msg+=`\nTotal: ₹${total}`;
 
-  message += `\nTotal: ₹${total}`;
+fetch('/order',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({userEmail:currentUser.email,items:cart,total})
+});
 
-  let url = `https://wa.me/917304578176?text=${encodeURIComponent(message)}`;
+window.open(`https://wa.me/917304578176?text=${encodeURIComponent(msg)}`);
+window.location.href="/success.html";
+}
 
-  window.open(url);
-
-  alert("✅ Order placed successfully!");
+function showOrders(){
+fetch('/orders/'+currentUser.email)
+.then(res=>res.json())
+.then(data=>{
+let html="<h3>Your Orders</h3>";
+data.forEach(o=>{
+html+=`<p>₹${o.total}</p>`;
+});
+document.getElementById("orders").innerHTML=html;
+});
 }
 </script>
 

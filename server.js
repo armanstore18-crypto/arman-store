@@ -18,6 +18,32 @@ const Product = mongoose.model('Product',{
   image:String
 });
 
+const User = mongoose.model('User',{
+  name:String,
+  email:String
+});
+
+const Order = mongoose.model('Order',{
+  userEmail:String,
+  items:Array,
+  total:Number
+});
+
+app.post('/login', async (req,res)=>{
+  let user = await User.findOne({email:req.body.email});
+  if(!user) user = await User.create(req.body);
+  res.json(user);
+});
+
+app.post('/order', async (req,res)=>{
+  await Order.create(req.body);
+  res.send("saved");
+});
+
+app.get('/orders/:email', async (req,res)=>{
+  res.json(await Order.find({userEmail:req.params.email}));
+});
+
 async function seedProducts(){
   await Product.deleteMany({});
 
