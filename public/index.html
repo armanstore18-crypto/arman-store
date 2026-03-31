@@ -179,7 +179,6 @@ body.cart-open { overflow:hidden; }
 
 <input id="phone" placeholder="Phone Number"><br><br>
 <input id="address" placeholder="Address"><br><br>
-</div>
 
 <script>
 let cart = [];
@@ -288,6 +287,7 @@ const overlay=document.getElementById("overlay");
 
 function placeOrder(){
 let phone = document.getElementById("phone").value;
+let address = document.getElementById("address").value;
 
 let msg = `🛒 Order
 
