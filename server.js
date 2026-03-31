@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
-mongoose.connect('mongodb+srv://arman1:arman123@cluster0.ilcnxcl.mongodb.net/arman-store')
+mongoose.connect('mongodb://arman1:arman123@ac-cjxbit5-shard-00-00.ilcnxcl.mongodb.net:27017,ac-cjxbit5-shard-00-01.ilcnxcl.mongodb.net:27017,ac-cjxbit5-shard-00-02.ilcnxcl.mongodb.net:27017/?ssl=true&replicaSet=atlas-gzibqu-shard-0&authSource=admin&appName=Cluster0')
 .then(async ()=>{
   console.log("MongoDB Connected");
 })
@@ -156,7 +156,10 @@ app.get('/products', async (req,res)=>{
   res.json(await Product.find());
 });
 
-// ✅ CORRECT PLACE
+app.get('/products', async (req,res)=>{
+  res.json(await Product.find());
+});
+
 app.get('/seed', async (req, res) => {
   try {
     await seedProducts();
