@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Arman Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arman Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
+<style>
 body {
   margin: 0;
   font-family: sans-serif;
   background: #f5f1e8;
 }
 
-/* LOCK SCROLL WHEN CART OPEN */
 body.cart-open {
   overflow: hidden;
 }
@@ -24,8 +23,28 @@ header {
   justify-content: space-between;
 }
 
-/* PRODUCTS GRID */
+.home {
+  text-align: center;
+  padding: 15px;
+}
+
+.main {
+  display: flex;
+}
+
+.sidebar {
+  width: 150px;
+  padding: 10px;
+}
+
+.sidebar button {
+  width: 100%;
+  margin: 5px 0;
+  padding: 8px;
+}
+
 .products {
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 10px;
@@ -45,7 +64,6 @@ header {
   object-fit: contain;
 }
 
-/* CART */
 .cart {
   position: fixed;
   top: 0;
@@ -63,7 +81,6 @@ header {
   right: 0;
 }
 
-/* OVERLAY */
 .overlay {
   position: fixed;
   top: 0;
@@ -79,17 +96,26 @@ header {
   display: block;
 }
 
-/* MOBILE FIX */
 @media (max-width: 768px) {
-  .products {
-    grid-template-columns: repeat(2, 1fr);
+  .main {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    display: flex;
+    overflow-x: auto;
+    width: 100%;
+  }
+
+  .sidebar button {
+    flex: 1;
   }
 
   .cart {
     width: 85%;
   }
 }
-  </style>
+</style>
 </head>
 
 <body>
@@ -99,36 +125,78 @@ header {
   <button onclick="openCart()">🛒 Cart</button>
 </header>
 
-<div class="products" id="products"></div>
+<div class="home">
+  <h2>Welcome to Arman Store</h2>
+  <p>Your one-stop shop for daily essentials, cleaning products, and household needs.</p>
+  <p>We provide quality products at affordable prices with quick service.</p>
+  <p>Our goal is to make your shopping easy and convenient.</p>
+
+  <h3>📍 Address</h3>
+  <p>Mumbai, Maharashtra, India</p>
+
+  <h3>📞 Contact</h3>
+  <p>Phone: 7304578176</p>
+  <p>Email: armanstore@gmail.com</p>
+  <p>Instagram: @armanstore</p>
+</div>
+
+<div class="main">
+  <div class="sidebar" id="categories"></div>
+  <div class="products" id="products"></div>
+</div>
 
 <div class="overlay" id="overlay" onclick="closeCart()"></div>
 
 <div class="cart" id="cart">
-  <button onclick="closeCart()" style="float:right;">✖</button>
+  <button onclick="closeCart()">✖</button>
   <h2>Cart</h2>
   <div id="cart-items"></div>
-  <button onclick="sendWhatsApp()">Place Order on WhatsApp</button>
+
+  <h3>Checkout</h3>
+  <input id="name" placeholder="Name"><br><br>
+  <input id="phone" placeholder="Phone"><br><br>
+  <textarea id="address" placeholder="Address"></textarea><br><br>
+
+  <button onclick="sendWhatsApp()">Place Order</button>
 </div>
 
 <script>
 let cart = [];
+let allProducts = [];
 
 fetch('/products')
 .then(res => res.json())
 .then(data => {
-  const container = document.getElementById("products");
+  allProducts = data;
+  showProducts(data);
 
-  data.forEach(product => {
-    container.innerHTML += `
+  let categories = [...new Set(data.map(p => p.category))];
+  let html = '<button onclick="showProducts(allProducts)">All</button>';
+  categories.forEach(c => {
+    html += `<button onclick="filterCategory('${c}')">${c}</button>`;
+  });
+  document.getElementById("categories").innerHTML = html;
+});
+
+function showProducts(data){
+  let html = "";
+  data.forEach(p => {
+    html += `
       <div class="product">
-        <img src="${product.image || 'https://via.placeholder.com/150'}">
-        <h4>${product.name}</h4>
-        <p>₹${product.price}</p>
-        <button onclick='addToCart(${JSON.stringify(product)})'>Add</button>
+        <img src="${p.image || ''}">
+        <h4>${p.name}</h4>
+        <p>₹${p.price}</p>
+        <button onclick='addToCart(${JSON.stringify(p)})'>Add</button>
       </div>
     `;
   });
-});
+  document.getElementById("products").innerHTML = html;
+}
+
+function filterCategory(cat){
+  let filtered = allProducts.filter(p => p.category === cat);
+  showProducts(filtered);
+}
 
 function addToCart(p){
   cart.push(p);
@@ -161,7 +229,12 @@ function closeCart(){
 }
 
 function sendWhatsApp(){
-  let message = "🛒 *New Order*\n\n";
+  let name = document.getElementById("name").value;
+  let phone = document.getElementById("phone").value;
+  let address = document.getElementById("address").value;
+
+  let message = `🛒 New Order\n\nName: ${name}\nPhone: ${phone}\nAddress: ${address}\n\n`;
+
   let total = 0;
 
   cart.forEach(item => {
@@ -169,12 +242,13 @@ function sendWhatsApp(){
     total += item.price;
   });
 
-  message += `\n*Total: ₹${total}*`;
+  message += `\nTotal: ₹${total}`;
 
-  const phone = "917304578176"; // 👉 PUT YOUR NUMBER HERE
-  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  let url = `https://wa.me/917304578176?text=${encodeURIComponent(message)}`;
 
-  window.open(url, "_blank");
+  window.open(url);
+
+  alert("✅ Order placed successfully!");
 }
 </script>
 
