@@ -20,7 +20,8 @@ const Product = mongoose.model('Product',{
 
 const User = mongoose.model('User',{
   name:String,
-  email:String
+  email:String,
+  password:String
 });
 
 const Order = mongoose.model('Order',{
@@ -31,7 +32,11 @@ const Order = mongoose.model('Order',{
 
 app.post('/login', async (req,res)=>{
   let user = await User.findOne({email:req.body.email});
-  if(!user) user = await User.create(req.body);
+
+  if(!user){
+    user = await User.create(req.body);
+  }
+
   res.json(user);
 });
 
