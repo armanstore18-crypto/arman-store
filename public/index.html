@@ -180,6 +180,11 @@ body.cart-open { overflow:hidden; }
 <input id="phone" placeholder="Phone Number"><br><br>
 <input id="address" placeholder="Address"><br><br>
 
+<button onclick="placeOrder()">Place Order</button><br><br>
+<button onclick="sendWhatsApp()">Order on WhatsApp</button>
+
+</div>
+
 <script>
 let cart = [];
 let allProducts = [];
@@ -307,6 +312,23 @@ body:JSON.stringify({userEmail:currentUser.email,items:cart,total})
 
 window.open(`https://wa.me/917304578176?text=${encodeURIComponent(msg)}`);
 window.location.href="/success.html";
+}
+
+function sendWhatsApp(){
+  let phone = document.getElementById("phone").value;
+  let address = document.getElementById("address").value;
+
+  let total = 0;
+  let msg = `🛒 Order\n\nUser: ${currentUser.email}\nPhone: ${phone}\nAddress: ${address}\n\n`;
+
+  cart.forEach(i=>{
+    msg += `${i.name} x${i.qty} - ₹${i.price*i.qty}\n`;
+    total += i.price*i.qty;
+  });
+
+  msg += `\nTotal: ₹${total}`;
+
+  window.open(`https://wa.me/917304578176?text=${encodeURIComponent(msg)}`);
 }
 
 function showOrders(){
