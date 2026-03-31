@@ -83,11 +83,11 @@ async function seedProducts(){
   {name:"Samarthya Wiper",price:200,category:"Wiper",image:"https://5.imimg.com/data5/ANDROID/Default/2023/1/GF/OP/BM/7061681/product-jpeg-1000x1000.jpg"},
 
   // ================= BROOM =================
-  {name:"Jet Clean Broom",price:150,category:"Broom"},
-  {name:"Mal Broom",price:130,category:"Broom"},
-  {name:"Diamond Broom",price:150,category:"Broom"},
-  {name:"Royal Broom",price:150,category:"Broom"},
-  {name:"Rainbow Broom",price:70,category:"Broom"},
+  {name:"Jet Clean Broom",price:150,category:"Broom",image:"https://m.media-amazon.com/images/I/41ruftAfTPL.jpg"},
+  {name:"Mal Broom",price:130,category:"Broom",image:"https://m.media-amazon.com/images/I/41ruftAfTPL.jpg"},
+  {name:"Diamond Broom",price:150,category:"Broom",image:"https://m.media-amazon.com/images/I/41ruftAfTPL.jpg"},
+  {name:"Royal Broom",price:150,category:"Broom",image:"https://m.media-amazon.com/images/I/41ruftAfTPL.jpg"},
+  {name:"Rainbow Broom",price:70,category:"Broom",image:"https://m.media-amazon.com/images/I/41ruftAfTPL.jpg"},
 
   // ================= ROOM FRESHNER =================
   {name:"Air First Lemon",price:100,category:"Room Freshner",image:"https://5.imimg.com/data5/SELLER/Default/2022/9/QT/TV/TK/133323768/airfirst-room-freshner1-1000x1000.jpg"},
