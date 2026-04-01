@@ -8,16 +8,25 @@
 body {
   margin:0;
   font-family:sans-serif;
-  background: linear-gradient(135deg, #e6f4ea, #c7e9d4);
-  color: #1b4332;
+  background: #0f172a;
+  color: #e5e7eb;
 }
 
 header {
-  background:#95d5b2;
-  color:#1b4332;
+  background:#111827;
+  color:#e5e7eb;
   padding:12px;
   display:flex;
   justify-content:space-between;
+  border-bottom:1px solid #1f2937;
+}
+
+header button {
+  border:1px solid #3b82f6;
+}
+
+header button:hover {
+  box-shadow:0 0 10px rgba(59,130,246,0.6);
 }
 
 header h3 {
@@ -29,7 +38,7 @@ body.cart-open { overflow:hidden; }
 .home {
   text-align:center;
   padding:15px;
-  color:#1b4332;
+  color:#e5e7eb;
 }
 
 .main { display:flex; }
@@ -39,12 +48,13 @@ body.cart-open { overflow:hidden; }
 .sidebar button { width:100%; margin:5px 0; padding:8px; }
 
 .sidebar button {
-  background:#b7e4c7;
-  color:#1b4332;
+  background:#111827;
+  color:#e5e7eb;
+  border:1px solid #1f2937;
 }
 
 .sidebar button:hover {
-  background:#95d5b2;
+  background:#1f2937;
 }
 
 /* ✅ FIXED GRID */
@@ -58,19 +68,18 @@ body.cart-open { overflow:hidden; }
 
 /* ✅ FIXED PRODUCT CARD */
 .product {
-  background:#ffffff;
-  border:1px solid #d8f3dc;
+  background:#111827;
+  border:1px solid #1f2937;
   padding:12px;
-  border-radius:12px;
+  border-radius:14px;
   text-align:center;
-  overflow:hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  color:#e5e7eb;
   transition:0.3s;
 }
 
 .product:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 0 20px rgba(59,130,246,0.4);
 }
 
 @keyframes fadeSlide {
@@ -141,17 +150,19 @@ h2, h3, h4, p {
 }
 
 button {
-  background:#52b788;
-  color:white;
-  border:none;
-  border-radius:8px;
+  background:#1f2937;
+  color:#e5e7eb;
+  border:1px solid #3b82f6;
+  border-radius:10px;
   font-weight:bold;
   padding:8px 12px;
   transition:0.3s;
 }
 
 button:hover {
-  background:#40916c;
+  background:#3b82f6;
+  color:white;
+  box-shadow: 0 0 10px rgba(59,130,246,0.6);
 }
 
 </style>
