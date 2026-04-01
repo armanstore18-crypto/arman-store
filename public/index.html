@@ -142,7 +142,7 @@ body.cart-open { overflow:hidden; }
 <input id="phone" placeholder="Phone Number"><br><br>
 <input id="address" placeholder="Address"><br><br>
 
-<button onclick="placeOrder()">Place Order</button>
+<button id="placeBtn">Place Order</button>
 
 </div>
 
@@ -371,6 +371,9 @@ function showHome(){
   document.querySelector(".main").style.display = "flex";
   document.getElementById("orders").innerHTML = "";
 }
+document.getElementById("placeBtn").addEventListener("click", function(){
+  placeOrder();
+});
 
 </script>
 
