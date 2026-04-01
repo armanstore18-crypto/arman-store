@@ -142,7 +142,7 @@ body.cart-open { overflow:hidden; }
 <input id="phone" placeholder="Phone Number"><br><br>
 <input id="address" placeholder="Address"><br><br>
 
-<button id="placeBtn">Place Order</button>
+<button onclick="placeOrder()">Place Order</button>
 
 </div>
 
@@ -150,6 +150,7 @@ body.cart-open { overflow:hidden; }
 let cart = [];
 let allProducts = [];
 let quantities = {};
+let currentUser = null;
 
 let savedUser = localStorage.getItem("user");
 if(savedUser){
@@ -327,7 +328,8 @@ function sendWhatsApp(){
 
   msg += `\nTotal: ₹${total}`;
 
-  window.open(`https://wa.me/917304578176?text=${encodeURIComponent(msg)}`);
+  let url = "https://wa.me/917304578176?text=" + encodeURIComponent(msg);
+window.location.href = url;
 }
 
 function showOrders(){
