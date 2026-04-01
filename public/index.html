@@ -8,17 +8,18 @@
 body {
   margin:0;
   font-family:sans-serif;
-  background: linear-gradient(135deg, #d8f3dc, #b7e4c7);
-  color: #d8f3dc;
+  background: linear-gradient(135deg, #e6f4ea, #c7e9d4);
+  color: #1b4332;
 }
 
 header {
-  background:#081c15;
-  color:#d8f3dc;
+  background:#95d5b2;
+  color:#1b4332;
   padding:12px;
   display:flex;
   justify-content:space-between;
 }
+
 body.cart-open { overflow:hidden; }
 
 .home { text-align:center; padding:15px; }
@@ -26,7 +27,17 @@ body.cart-open { overflow:hidden; }
 .main { display:flex; }
 
 .sidebar { width:150px; padding:10px; }
+
 .sidebar button { width:100%; margin:5px 0; padding:8px; }
+
+.sidebar button {
+  background:#b7e4c7;
+  color:#1b4332;
+}
+
+.sidebar button:hover {
+  background:#95d5b2;
+}
 
 /* ✅ FIXED GRID */
 .products {
@@ -40,11 +51,18 @@ body.cart-open { overflow:hidden; }
 /* ✅ FIXED PRODUCT CARD */
 .product {
   background:#ffffff;
-  border:1px solid #b7e4c7;
-  padding:10px;
-  border-radius:10px;
+  border:1px solid #d8f3dc;
+  padding:12px;
+  border-radius:12px;
   text-align:center;
   overflow:hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition:0.3s;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
 @keyframes fadeSlide {
@@ -118,8 +136,10 @@ button {
   background:#52b788;
   color:white;
   border:none;
-  border-radius:6px;
+  border-radius:8px;
   font-weight:bold;
+  padding:8px 12px;
+  transition:0.3s;
 }
 
 button:hover {
