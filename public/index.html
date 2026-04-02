@@ -223,9 +223,18 @@ button:hover {
 <input id="phone" placeholder="Phone Number"><br><br>
 <input id="address" placeholder="Address"><br><br>
 
+<h3>Select Payment Method</h3>
+
+<select id="paymentMethod">
+  <option value="COD">Cash on Delivery (COD)</option>
+  <option value="ONLINE">Pay Online (Razorpay)</option>
+</select><br><br>
+
 <button onclick="placeOrder()">Place Order</button>
 
 </div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
 let cart = [];
@@ -345,6 +354,7 @@ function placeOrder(){
 
   let phone = document.getElementById("phone").value;
   let address = document.getElementById("address").value;
+  let paymentMethod = document.getElementById("paymentMethod").value;
 
   if(!phone || !address){
     alert("Please fill phone and address");
@@ -352,47 +362,79 @@ function placeOrder(){
   }
 
   let total = 0;
-
-  let msg = "🛒 Order\n\n";
-
-  if(currentUser){
-    msg += "User: " + currentUser.email + "\n";
-  }
-
-  msg += "Phone: " + phone + "\n";
-  msg += "Address: " + address + "\n\n";
-
   cart.forEach(i=>{
-    msg += i.name + " x" + i.qty + " - ₹" + (i.price*i.qty) + "\n";
-    total += i.price*i.qty;
+    total += i.price * i.qty;
   });
 
-  msg += "\nTotal: ₹" + total;
+  // 🟢 COD FLOW
+  if(paymentMethod === "COD"){
 
-  // ✅ OPEN WHATSAPP (MAIN FEATURE)
-  window.open("https://wa.me/917304578176?text=" + encodeURIComponent(msg));
+    let msg = "🛒 Order (COD)\n\n";
 
-  // ✅ SAVE ORDER (optional but good)
-  if(currentUser){
-    fetch('/order',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        userEmail: currentUser.email,
-        items: cart,
-        total
-      })
+    if(currentUser){
+      msg += "User: " + currentUser.email + "\n";
+    }
+
+    msg += "Phone: " + phone + "\n";
+    msg += "Address: " + address + "\n\n";
+
+    cart.forEach(i=>{
+      msg += i.name + " x" + i.qty + " - ₹" + (i.price*i.qty) + "\n";
     });
+
+    msg += "\nTotal: ₹" + total;
+    msg += "\nPayment: COD";
+
+    window.open("https://wa.me/917304578176?text=" + encodeURIComponent(msg));
+
+    cart = [];
+    renderCart();
+
+    return;
   }
 
-  // ✅ CLEAR CART
-  cart = [];
-  renderCart();
+  // 🟢 RAZORPAY FLOW
+  if(paymentMethod === "ONLINE"){
 
-  // ✅ REDIRECT
-  setTimeout(()=>{
-    window.location.href = "/success.html";
-  },1000);
+    var options = {
+      "key": "MLMb8NkPwb90EUrHXzIpyaqD",
+      "amount": total * 100,
+      "currency": "INR",
+      "name": "Arman Store",
+      "description": "Order Payment",
+
+      "handler": function (response){
+
+        let msg = "🛒 Order (Paid)\n\n";
+
+        if(currentUser){
+          msg += "User: " + currentUser.email + "\n";
+        }
+
+        msg += "Phone: " + phone + "\n";
+        msg += "Address: " + address + "\n\n";
+
+        cart.forEach(i=>{
+          msg += i.name + " x" + i.qty + " - ₹" + (i.price*i.qty) + "\n";
+        });
+
+        msg += "\nTotal: ₹" + total;
+        msg += "\nPayment: Paid ✅";
+
+        window.open("https://wa.me/917304578176?text=" + encodeURIComponent(msg));
+
+        cart = [];
+        renderCart();
+
+        setTimeout(()=>{
+          window.location.href = "/success.html";
+        },1000);
+      }
+    };
+
+    var rzp = new Razorpay(options);
+    rzp.open();
+  }
 }
 
 function sendWhatsApp(){
