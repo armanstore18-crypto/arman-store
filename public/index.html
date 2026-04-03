@@ -458,7 +458,7 @@ localStorage.setItem("orders", JSON.stringify(orders));
         msg += "\nTotal: ₹" + total;
         msg += "\nPayment: Paid ✅";
 
-        window.open("https://wa.me/917304578176?text=" + encodeURIComponent(msg));
+        window.location.href = "https://wa.me/917304578176?text=" + encodeURIComponent(msg);
 
         cart = [];
         renderCart();
@@ -506,13 +506,14 @@ function showOrders(){
     orders.forEach(o=>{
       html += `
       <div style="
-        background:white;
-        margin:15px;
-        padding:15px;
-        border-radius:10px;
-      ">
+  background:white;
+  margin:15px;
+  padding:15px;
+  border-radius:10px;
+  color:#111827;   /* ✅ DARK TEXT */
+">
         <h3>Total: ₹${o.total}</h3>
-        ${o.items.map(i => `<p>${i.name} x${i.qty}</p>`).join("")}
+        ${o.items.map(i => `<p style="color:#111827;">${i.name} x${i.qty}</p>`).join("")}
       </div>
       `;
     });
