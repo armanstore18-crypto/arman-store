@@ -236,8 +236,6 @@ Instagram:
 <div class="products" id="products"></div>
 </div>
 
-<div id="orders"></div>
-
 <div class="overlay" id="overlay" onclick="closeCart()"></div>
 
 <div class="cart" id="cart">
@@ -490,36 +488,6 @@ function sendWhatsApp(){
 
   let url = "https://wa.me/917304578176?text=" + encodeURIComponent(msg);
 window.location.href = url;
-}
-
-function showOrders(){
-
-  document.querySelector(".main").style.display = "none";
-
-  let orders = JSON.parse(localStorage.getItem("orders")) || [];
-
-  let html = "<h2 style='text-align:center;'>Your Orders</h2>";
-
-  if(orders.length === 0){
-    html += "<p style='text-align:center;'>No orders yet</p>";
-  } else {
-    orders.forEach(o=>{
-      html += `
-      <div style="
-  background:white;
-  margin:15px;
-  padding:15px;
-  border-radius:10px;
-  color:#111827;   /* ✅ DARK TEXT */
-">
-        <h3>Total: ₹${o.total}</h3>
-        ${o.items.map(i => `<p style="color:#111827;">${i.name} x${i.qty}</p>`).join("")}
-      </div>
-      `;
-    });
-  }
-
-  document.getElementById("orders").innerHTML = html;
 }
 
 </script>
