@@ -381,6 +381,7 @@ function placeOrder(){
 
   let phone = document.getElementById("phone").value;
   let address = document.getElementById("address").value;
+  localStorage.setItem("userPhone", phone);
   let paymentMethod = document.getElementById("paymentMethod").value;
 
   if(!phone || !address){
@@ -404,6 +405,15 @@ function placeOrder(){
 
     msg += "Phone: " + phone + "\n";
     msg += "Address: " + address + "\n\n";
+
+    let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+orders.push({
+  items: cart,
+  total: total
+});
+
+localStorage.setItem("orders", JSON.stringify(orders));
 
     cart.forEach(i=>{
       msg += i.name + " x" + i.qty + " - ₹" + (i.price*i.qty) + "\n";
@@ -486,46 +496,30 @@ function showOrders(){
 
   document.querySelector(".main").style.display = "none";
 
-  let phone = localStorage.getItem("userPhone");
+  let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
-if(!phone){
-  alert("Please place an order first");
-  return;
-}
+  let html = "<h2 style='text-align:center;'>Your Orders</h2>";
 
-fetch('/orders/'+phone)
-  .then(res=>res.json())
-  .then(data=>{
-    let html="<h2 style='text-align:center;'>Your Orders</h2>";
-
-    data.forEach(o=>{
+  if(orders.length === 0){
+    html += "<p style='text-align:center;'>No orders yet</p>";
+  } else {
+    orders.forEach(o=>{
       html += `
       <div style="
         background:white;
         margin:15px;
         padding:15px;
         border-radius:10px;
-        box-shadow:0 2px 10px rgba(0,0,0,0.1);
       ">
         <h3>Total: ₹${o.total}</h3>
         ${o.items.map(i => `<p>${i.name} x${i.qty}</p>`).join("")}
       </div>
       `;
     });
+  }
 
-    document.getElementById("orders").innerHTML=html;
-
-    // ✅ AUTO SCROLL TO ORDERS
-    document.getElementById("orders").scrollIntoView({behavior:"smooth"});
-  });
+  document.getElementById("orders").innerHTML = html;
 }
-function showHome(){
-  document.querySelector(".main").style.display = "flex";
-  document.getElementById("orders").innerHTML = "";
-}
-document.getElementById("placeBtn").addEventListener("click", function(){
-  placeOrder();
-});
 
 </script>
 
